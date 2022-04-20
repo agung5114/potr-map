@@ -1,0 +1,9 @@
+requests_html 
+pygooglenews 
+googletrans==4.0.0rc1
+plotly-express
+matplotlib
+yfinance
+streamlit
+streamlit-aggrid
+sklearn
