@@ -23,7 +23,7 @@ defusedxml==0.7.1
 entrypoints==0.4
 executing==0.8.3
 fastjsonschema==2.15.3
-feedparser
+#feedparser
 fonttools==4.32.0
 gitdb==4.0.9
 GitPython==3.1.27
@@ -82,7 +82,7 @@ pyarrow==7.0.0
 pycparser==2.21
 pydeck==0.7.1
 Pygments==2.11.2
-pygooglenews
+#pygooglenews
 Pympler==1.0.1
 pyparsing==3.0.8
 pyrsistent==0.18.1
