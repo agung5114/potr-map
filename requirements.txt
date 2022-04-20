@@ -35,7 +35,7 @@ hstspreload==2021.12.1
 httpcore==0.9.1
 httpx==0.13.3
 hyperframe==5.2.0
-idna==3.3
+idna
 importlib-metadata==4.11.3
 importlib-resources==5.7.1
 ipykernel==6.13.0
