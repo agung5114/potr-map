@@ -152,7 +152,8 @@ elif choice =="FINANCIAL ANALYSIS":
         st.subheader('Worker Exploitation by Ratio Indicators')
         AgGrid(df)
     with c2:
-        fig2 = px.scatter(df,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',color='Risk Level',size=[18 for i in df['Risk Level']],color_discrete_sequence=["red", "orange", "green"])
+        fig2 = px.scatter(df,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',
+                          hover_data='Company_Name',color='Risk Level',size=[18 for i in df['Risk Level']],color_discrete_sequence=["red", "orange", "green"])
         fig2.update_layout(title_text="Risk Quadrant")
         st.plotly_chart(fig2)
 
