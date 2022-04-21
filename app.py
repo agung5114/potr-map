@@ -79,7 +79,7 @@ def nlp_unspv(df,column,cluster):
     return df
 
 ##TOP PAGE
-menu = ["TAHUB DATA","CLUSTERING","CPO MAPS","NEWS SCRAPER","FINANCIAL ANALYSIS", "RISK MAPS"]
+menu = ["TAHUB DATA","CLUSTERING","NEWS SCRAPER","FINANCIAL ANALYSIS", "PALM OIL MILLS MAPS"]
 choice = st.sidebar.selectbox("Select Menu", menu)
 if choice == "TAHUB DATA":
     components.html('''
@@ -135,7 +135,7 @@ elif choice =="FINANCIAL ANALYSIS":
     st.subheader('Worker Exploitation by Ratio Indicators')
     AgGrid(df)
 
-elif choice =="RISK MAPS":
+elif choice =="PALM OIL MILLS MAPS":
     components.html('''
     <style>
     #wrap { width: 1020px; height: 900px; padding: 0; border: 0px solid grey; overflow: hidden; }
