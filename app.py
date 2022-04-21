@@ -147,11 +147,14 @@ elif choice =="NEWS SCRAPER":
         ''',height=900,width=1680)
 elif choice =="FINANCIAL ANALYSIS":
     df = pd.read_csv('cpodata.csv')
-    st.subheader('Worker Exploitation by Ratio Indicators')
-    AgGrid(df)
-    fig2 = px.scatter(df,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',color='Risk Level',size='Risk Level',color_discrete_sequence=["red", "orange", "green"])
-    fig2.update_layout(title_text="Risk Quadrant")
-    st.plotly_chart(fig2)
+    c1, c2 = st.columns((1,1))
+    with c1:
+        st.subheader('Worker Exploitation by Ratio Indicators')
+        AgGrid(df)
+    with c2:
+        fig2 = px.scatter(df,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',color='Risk Level',size='Risk Level',color_discrete_sequence=["red", "orange", "green"])
+        fig2.update_layout(title_text="Risk Quadrant")
+        st.plotly_chart(fig2)
 
 elif choice =="RISK MAPS":
     components.html('''
