@@ -148,7 +148,7 @@ elif choice =="NEWS SCRAPER":
 elif choice =="FINANCIAL ANALYSIS":
     df = pd.read_csv('cpodata.csv')
     st.subheader('Worker Exploitation by Ratio Indicators')
-    AgGrid(df.iloc[0:,1:])
+    AgGrid(df)
     fig2 = px.scatter(df,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',color='Risk Level',size='Risk Level',color_discrete_sequence=["red", "orange", "green"])
     fig2.update_layout(title_text="Risk Quadrant")
     st.plotly_chart(fig2)
