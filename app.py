@@ -116,7 +116,7 @@ if choice == "TAHUB DATA":
                 wordcloud = WordCloud (
                             background_color = 'white',
                             width = 650,
-                            stopwords =set(stopwords.words('english')),
+                            stopwords =['and','between'],
                             height = 400
                                 ).generate(' '.join(cek))
                 fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column}')
