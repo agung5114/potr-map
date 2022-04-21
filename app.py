@@ -123,7 +123,7 @@ if choice == "TAHUB DATA":
                 fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column} in Cluster{CLuster}')
                 st.plotly_chart(fig0)
 elif choice =="NEWS SCRAPER":
-    df = pd.read_csv('scrap_keywords.csv')
+    df = pd.read_csv('cpo_cases.csv')
     st.subheader('News Related with Palm Oil Workers')
     AgGrid(df)
     st.subheader('Custom News Scraping')
