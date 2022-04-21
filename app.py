@@ -16,7 +16,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.decomposition import TruncatedSVD
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide",page_title="POTR-MAP")
 import streamlit.components.v1 as components
 
 from googletrans import Translator, constants
