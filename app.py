@@ -8,6 +8,7 @@ import json
 import pickle 
 from st_aggrid import AgGrid
 import pandas as pd
+from PIL import Image
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
