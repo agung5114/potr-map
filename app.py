@@ -109,6 +109,7 @@ if choice == "TAHUB DATA":
             with col1:
                 df_plot = df_new.groupby(by='Country',as_index=False).agg({'count':'sum'})
                 fig = px.bar(df_plot,x='Country',y='count',color='Country',barmode='group')
+                fig.update_layout(title_text="Number of Cases")
                 st.plotly_chart(fig)
             with col2:
                 from nltk.corpus import stopwords
@@ -119,7 +120,7 @@ if choice == "TAHUB DATA":
                             stopwords =['and','between'],
                             height = 400
                                 ).generate(' '.join(cek))
-                fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column}')
+                fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column} in Cluster{CLuster}')
                 st.plotly_chart(fig0)
 elif choice =="NEWS SCRAPER":
     df = pd.read_csv('scrap_keywords.csv')
