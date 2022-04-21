@@ -10,11 +10,11 @@ from st_aggrid import AgGrid
 import pandas as pd
 from PIL import Image
 
-import sklearn
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.decomposition import TruncatedSVD
+# import sklearn
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.cluster import KMeans
+# from sklearn.decomposition import PCA
+# from sklearn.decomposition import TruncatedSVD
 
 st.set_page_config(layout="wide",page_title="POTR-MAP")
 import streamlit.components.v1 as components
@@ -68,16 +68,16 @@ def get_titletext(keyword,src,dest,country_id):
 #     df['Country_ID'] = country_id
 #     df['Title_in_English'] = df['Original_Title'].apply(translate,args=(src,dest))
 #     return df[['Title_in_English','Keyword','Source','Link']]
-def nlp_unspv(df,column,cluster):
-    base = df[column].astype('str')
-    # base = df[column]
-    v = TfidfVectorizer()
-    x = v.fit_transform(base)
-    clf = TruncatedSVD(3)
-    Xpca = clf.fit_transform(x)
-    kmeans = KMeans(n_clusters=cluster).fit(Xpca)
-    df['Cluster'] = kmeans.predict(Xpca)
-    return df
+# def nlp_unspv(df,column,cluster):
+#     base = df[column].astype('str')
+#     # base = df[column]
+#     v = TfidfVectorizer()
+#     x = v.fit_transform(base)
+#     clf = TruncatedSVD(3)
+#     Xpca = clf.fit_transform(x)
+#     kmeans = KMeans(n_clusters=cluster).fit(Xpca)
+#     df['Cluster'] = kmeans.predict(Xpca)
+#     return df
 
 ##TOP PAGE
 st.title("Palm Oils Trafficking Risk Mapping Dashboard")
@@ -91,24 +91,36 @@ if choice == "TAHUB DATA":
         <div class='tableauPlaceholder' id='viz1650451818109' style='position: relative'><noscript><a href='#'><img alt='Number of Incident Reporting ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Tr&#47;TraffickingIncidentReporting&#47;NumberofIncidentReporting&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='TraffickingIncidentReporting&#47;NumberofIncidentReporting' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Tr&#47;TraffickingIncidentReporting&#47;NumberofIncidentReporting&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div> <script type='text/javascript'> var divElement = document.getElementById('viz1650451818109');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1366px';vizElement.style.height='795px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1366px';vizElement.style.height='795px';} else { vizElement.style.width='100%';vizElement.style.height='727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
         ''',height=900,
             width=1440)
-    st.subheader('TAHUB Data')
-    df = pd.read_feather('tahub_data.feather')
-    df = df[["Country","Trafficking Type","Industry Sector","Coercion Method","Victim Gender","Victim Age","Incident Reporting Date"]]
+    
+    df = pd.read_feather('tahub.feather',columns=["Country","Cluster","Trafficking Type","Industry Sector","Coercion Method","Victim Gender","Victim Age","Incident Reporting Date"])
+    # df = df[["Country","Trafficking Type","Industry Sector","Coercion Method","Victim Gender","Victim Age","Incident Reporting Date"]]
+    st.subheader('Clustering')
     AgGrid(df)
     cl_exp = st.expander(label='Clustering Parameters')
+    df['count'] = 1
     with cl_exp:
-        Cluster = st.number_input('Number of Cluster',min_value=1,max_value=100,step=1)
-        Column = st.selectbox("Column Title",df.columns)
+        Cluster = st.selectbox('Select Cluster',df.Cluster.unique())
+        Column = st.selectbox("Select Column",df.columns)
         Country = st.multiselect("Select Country",df.Country.unique())
-        if st.button("Run Clustering"):
-            st.write("Clustering Output")
+        if st.button("Show Cluster Overview"):
             df_new = df[df['Country'].isin(Country)]
-            df_new = nlp_unspv(df_new,Column, Cluster)
-            df_new['count'] = 1
-            df_plot = df_new.groupby(by=['Country','Cluster'],as_index=False).agg({'count':'sum'})
-            fig = px.bar(df_plot,x='Cluster',y='count',color='Country',barmode='stack')
-            st.plotly_chart(fig)
-            AgGrid(df_new)
+            df_new = df_new[df_new['Cluster']==Cluster]
+            col1, col2 = st.columns((1,1))
+            with col1:
+                df_plot = df_new.groupby(by='Country',as_index=False).agg({'count':'sum'})
+                fig = px.bar(df_plot,x='Country',y='count',color='Country',barmode='group')
+                st.plotly_chart(fig)
+            with col2:
+                from nltk.corpus import stopwords
+                cek = df_new[Column].tolist()
+                wordcloud = WordCloud (
+                            background_color = 'white',
+                            width = 650,
+                            stopwords =set(stopwords.words('english')),
+                            height = 400
+                                ).generate(' '.join(cek))
+                fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column}')
+                st.plotly_chart(fig0)
 elif choice =="NEWS SCRAPER":
     df = pd.read_csv('scrap_keywords.csv')
     st.subheader('News Related with Palm Oil Workers')
@@ -158,36 +170,3 @@ elif choice =="RISK MAPS":
     ,height=900,
      width=1440)
     
-
-    # txt = st.text_input('Input Text Here')
-    # st.write(f'ini inputan text:  {txt}')
-    # nbr = st.number_input('Input Number Here')
-    # st.write(f'ini inputan number:  {nbr}')
-    # image = st.file_uploader(label='File Uploader')
-    # col1, col2 = st.columns(2)
-
-    # if image == None:
-    #     st.write('Please Upload an Image')
-    # else:
-    #     original = Image.open(image)
-    #     col1.header("Original")
-    #     col1.image(original, use_column_width=True)
-
-    #     grayscale = original.convert('LA')
-    #     col2.header("Grayscale")
-    #     col2.image(grayscale, use_column_width=True)
-
-    # # Expander
-    # st.title("Expander")
-    # my_expander = st.expander(label='Expander1')
-    # with my_expander:
-    #     'Hello there!'
-    #     c1, c2, c3, c4 = st.columns((2, 1, 1, 1))
-    #     with c1:
-    #         "kolom 1"
-    #     with c2:
-    #         "kolom 2"
-    #     with c3:
-    #         "kolom 3"
-    #     with c4:
-    #         "kolom 4"
