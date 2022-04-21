@@ -130,10 +130,15 @@ elif choice =="NEWS SCRAPER":
     custom_search = st.expander(label='Search Parameters')
     with custom_search:
         keyword = st.text_input("Search Keyword")
-        slang = st.text_input("Source Language ID")
-        ctr_id = st.text_input("Country ID")
+        ctr = st.selectbox("Select Country",['Indonesia','Malaysia'])
+        if ctr =='Indonesia':
+            slang ='id'
+            ctr_id = 'ID'
+        else:
+            slang ='en'
+            ctr_id = 'MY'
         if st.button("Run Scraping"):
-            df_scrap = get_titletext(keyword.lower(),slang.lower(),'en',ctr_id.upper())
+            df_scrap = get_titletext(keyword.lower(),slang,'en',ctr_id)
             AgGrid(df_scrap)
     kibana = st.expander(label='Kibana Dashboard')
     with kibana:
