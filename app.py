@@ -112,7 +112,6 @@ if choice == "TAHUB DATA":
                 fig.update_layout(title_text="Number of Cases")
                 st.plotly_chart(fig)
             with col2:
-                from nltk.corpus import stopwords
                 cek = df_new[Column].tolist()
                 wordcloud = WordCloud (
                             background_color = 'white',
@@ -120,7 +119,8 @@ if choice == "TAHUB DATA":
                             stopwords =['and','between'],
                             height = 400
                                 ).generate(' '.join(cek))
-                fig0 = px.imshow(wordcloud,title=f'Wordcloud of {Column} in Cluster{CLuster}')
+                fig0 = px.imshow(wordcloud)
+                fig0.update_layout(title_text=f'Wordcloud of {Column} in Cluster{CLuster}')
                 st.plotly_chart(fig0)
 elif choice =="NEWS SCRAPER":
     df = pd.read_csv('cpo_cases.csv')
@@ -149,6 +149,9 @@ elif choice =="FINANCIAL ANALYSIS":
     df = pd.read_csv('cpodata.csv')
     st.subheader('Worker Exploitation by Ratio Indicators')
     AgGrid(df)
+    fig2 = px.scatter(df_plot,x='Profit Rate(Gross Profit/General Expense)',y='Revenue_rate(Revenue/General Expense)',color='Risk Level')
+    fig2.update_layout(title_text="Risk Quadrant")
+    st.plotly_chart(fig2)
 
 elif choice =="RISK MAPS":
     components.html('''
